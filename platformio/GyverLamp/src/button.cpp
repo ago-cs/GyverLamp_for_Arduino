@@ -1,6 +1,7 @@
 #include "config.h"
 #include "effectTicker.h"
 #include "main.h"
+#include "utility.h"
 #include <Arduino.h>
 #include <EEPROM.h>
 #include <FastLED.h>
@@ -8,8 +9,8 @@
 
 extern GButton touch;
 extern boolean ONflag;
-extern int8_t currentMode;
 extern boolean loadingFlag;
+extern int8_t currentMode;
 extern MODE_STR modes[MODE_AMOUNT];
 extern byte numHold;
 extern unsigned long numHold_Timer;
@@ -59,29 +60,27 @@ void buttonTick() {
       delay(1);
     }
 
-    if ((touch.hasClicks()) &&
-        (touch.getClicks() ==
-         5)) { // если было пятикратное нажатие на кнопку, то производим
-               // сохранение параметров // && (touch.hasClicks())
-      if (EEPROM.read(0) != 102)
-        EEPROM.write(0, 102);
-      if (EEPROM.read(1) != currentMode)
-        EEPROM.write(1, currentMode); // запоминаем текущий эфект
-      for (byte x = 0; x < MODE_AMOUNT;
-           x++) { // сохраняем настройки всех режимов
-        if (EEPROM.read(x * 3 + 11) != modes[x].brightness)
-          EEPROM.write(x * 3 + 11, modes[x].brightness);
-        if (EEPROM.read(x * 3 + 12) != modes[x].speed)
-          EEPROM.write(x * 3 + 12, modes[x].speed);
-        if (EEPROM.read(x * 3 + 13) != modes[x].scale)
-          EEPROM.write(x * 3 + 13, modes[x].scale);
-      }
-      // индикация сохранения
+    //    if ((touch.hasClicks()) &&
+    //        (touch.getClicks() ==
+    //         5)) { // если было пятикратное нажатие на кнопку, то производим
+    //               // сохранение параметров // && (touch.hasClicks())
+    //      saveConfig();
+    //      // индикация сохранения
+    //      ONflag = false;
+    //      changePower();
+    //      delay(200);
+    //      ONflag = true;
+    //      changePower();
+    //    }
+
+    if ((touch.hasClicks()) && (touch.getClicks() == 5)) {
+      // если было пятикратное нажатие на кнопку, то производим сброс параметров && (touch.hasClicks())
+      // индикация сброса
       ONflag = false;
       changePower();
+      resetConfig();
       delay(200);
-      ONflag = true;
-      changePower();
+      reset();
     }
 
     if (touch.isHolded()) { // изменение яркости при удержании кнопки
@@ -109,8 +108,9 @@ void buttonTick() {
       //    Serial.print(modes[currentMode].speed);
       //    Serial.print(" scale:");
       //    Serial.println(modes[currentMode].scale);
-      if (numHold != 0)
+      if (numHold != 0) {
         numHold_Timer = millis();
+      }
       loadingFlag = true;
       switch (numHold) {
       case 1:
@@ -127,11 +127,8 @@ void buttonTick() {
         //                  modes[currentMode].brightness -= 1; else
         //                  modes[currentMode].brightness = 1;
         //                }
-        modes[currentMode].brightness =
-            constrain(modes[currentMode].brightness +
-                          (modes[currentMode].brightness / 25 + 1) *
-                              (brightDirection * 2 - 1),
-                      1, 255);
+        //modes[currentMode].brightness = constrain(modes[currentMode].brightness + (modes[currentMode].brightness / 25 + 1) * (brightDirection * 2 - 1), 1, 255);
+        modes[currentMode].brightness = constrain(modes[currentMode].brightness + 4 * (brightDirection * 2 - 1), 1, 255);
         //        byte x = sqrt(modes[currentMode].brightness);
         //        for (byte y = 0; y < HEIGHT - 1; y++) {
         //          if (x < y) drawPixelXY(1, y, CHSV(10,200,200));
@@ -153,10 +150,8 @@ void buttonTick() {
         //                  modes[currentMode].speed -= 1; else
         //                  modes[currentMode].speed = 1;
         //                }
-        modes[currentMode].speed = constrain(
-            modes[currentMode].speed +
-                (modes[currentMode].speed / 25 + 1) * (speedDirection * 2 - 1),
-            1, 255);
+        //modes[currentMode].speed = constrain(modes[currentMode].speed + (modes[currentMode].speed / 25 + 1) * (speedDirection * 2 - 1), 1, 255);
+        modes[currentMode].speed = constrain(modes[currentMode].speed + 4 * (speedDirection * 2 - 1), 1, 255);
         break;
 
       case 3:
@@ -173,10 +168,8 @@ void buttonTick() {
         //                  modes[currentMode].scale -= 1; else
         //                  modes[currentMode].scale = 1;
         //                }
-        modes[currentMode].scale = constrain(
-            modes[currentMode].scale +
-                (modes[currentMode].scale / 25 + 1) * (scaleDirection * 2 - 1),
-            1, 255);
+        //modes[currentMode].scale = constrain(modes[currentMode].scale + (modes[currentMode].scale / 25 + 1) * (scaleDirection * 2 - 1), 1, 255);
+        modes[currentMode].scale = constrain(modes[currentMode].scale + 4 * (scaleDirection * 2 - 1), 1, 255);
         break;
       }
     }

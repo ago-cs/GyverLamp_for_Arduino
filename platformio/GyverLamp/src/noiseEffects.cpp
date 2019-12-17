@@ -170,8 +170,7 @@ void fillNoiseLED() {
 
       if (dataSmoothing) {
         uint8_t olddata = noise[i][j];
-        uint8_t newdata =
-            scale8(olddata, dataSmoothing) + scale8(data, 256 - dataSmoothing);
+        uint8_t newdata = scale8(olddata, dataSmoothing) + scale8(data, 256 - dataSmoothing);
         data = newdata;
       }
 

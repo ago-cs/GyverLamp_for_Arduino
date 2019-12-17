@@ -16,9 +16,7 @@ extern MODE_STR modes[MODE_AMOUNT];
 void effectsTick() {
   // if (!dawnFlag)
   {
-    if (ONflag && millis() - effTimer >= ((currentMode < 5 || currentMode > 13)
-                                              ? modes[currentMode].speed
-                                              : 50)) {
+    if (ONflag && millis() - effTimer >= ((currentMode < 5 || currentMode > 13) ? modes[currentMode].speed : 50)) {
       effTimer = millis();
       switch (currentMode) {
       case 0:
@@ -80,7 +78,7 @@ void effectsTick() {
       }
       switch (numHold) { // индикатор уровня яркости/скорости/масштаба
       case 1:
-        ind = sqrt(modes[currentMode].brightness + 1);
+        ind = (modes[currentMode].brightness + 1) / 16;
         for (byte y = 0; y < HEIGHT; y++) {
           if (ind > y)
             drawPixelXY(0, y, CHSV(10, 255, 255));
@@ -89,7 +87,7 @@ void effectsTick() {
         }
         break;
       case 2:
-        ind = sqrt(modes[currentMode].speed - 1);
+        ind = (modes[currentMode].speed - 1) / 16;
         for (byte y = 0; y <= HEIGHT; y++) {
           if (ind <= y)
             drawPixelXY(0, 15 - y, CHSV(100, 255, 255));
@@ -98,7 +96,7 @@ void effectsTick() {
         }
         break;
       case 3:
-        ind = sqrt(modes[currentMode].scale + 1);
+        ind = (modes[currentMode].scale + 1) / 16;
         for (byte y = 0; y < HEIGHT; y++) {
           if (ind > y)
             drawPixelXY(0, y, CHSV(150, 255, 255));
@@ -133,5 +131,6 @@ void changePower() { // плавное включение/выключение
     FastLED.clear();
     delay(2);
     FastLED.show();
+    saveConfig();
   }
 }

@@ -2,8 +2,11 @@
 #include "config.h"
 #include "main.h"
 #include <Arduino.h>
+#include <EEPROM.h>
 
 extern CRGB leds[NUM_LEDS];
+extern int8_t currentMode;
+extern MODE_STR modes[MODE_AMOUNT];
 
 // служебные функции
 
@@ -29,8 +32,7 @@ uint32_t getPixColor(int thisSegm) {
   int thisPixel = thisSegm * SEGMENTS;
   if (thisPixel < 0 || thisPixel > NUM_LEDS - 1)
     return 0;
-  return (((uint32_t)leds[thisPixel].r << 16) | ((long)leds[thisPixel].g << 8) |
-          (long)leds[thisPixel].b);
+  return (((uint32_t)leds[thisPixel].r << 16) | ((long)leds[thisPixel].g << 8) | (long)leds[thisPixel].b);
 }
 
 // функция получения цвета пикселя в матрице по его координатам
@@ -94,4 +96,29 @@ uint16_t getPixelNumber(int8_t x, int8_t y) {
   } else { // если нечётная строка
     return (THIS_Y * _WIDTH + _WIDTH - THIS_X - 1);
   }
+}
+
+void saveConfig() {
+  if (EEPROM.read(0) != 102)
+    EEPROM.write(0, 102);
+  if (EEPROM.read(1) != currentMode)
+    EEPROM.write(1, currentMode);          // запоминаем текущий эфект
+  for (byte x = 0; x < MODE_AMOUNT; x++) { // сохраняем настройки всех режимов
+    if (EEPROM.read(x * 3 + 11) != modes[x].brightness)
+      EEPROM.write(x * 3 + 11, modes[x].brightness);
+    if (EEPROM.read(x * 3 + 12) != modes[x].speed)
+      EEPROM.write(x * 3 + 12, modes[x].speed);
+    if (EEPROM.read(x * 3 + 13) != modes[x].scale)
+      EEPROM.write(x * 3 + 13, modes[x].scale);
+  }
+}
+
+void resetConfig() {
+  EEPROM.write(0, 0);
+}
+
+void (*resetFunc)(void) = 0; // declare reset function at address 0
+
+void reset() {
+  resetFunc();
 }
