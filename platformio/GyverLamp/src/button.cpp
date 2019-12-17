@@ -3,7 +3,6 @@
 #include "main.h"
 #include "utility.h"
 #include <Arduino.h>
-#include <EEPROM.h>
 #include <FastLED.h>
 #include <GyverButton.h>
 
