@@ -89,6 +89,8 @@ void setup() {
       modes[x].scale = EEPROM.read(x * 3 + 13);
     }
   }
+  pinMode(LED_BUILTIN, OUTPUT);
+  digitalWrite(LED_BUILTIN, HIGH);
 }
 
 void loop() {

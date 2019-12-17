@@ -87,7 +87,7 @@ void effectsTick() {
         }
         break;
       case 2:
-        ind = (modes[currentMode].speed - 1) / 16;
+        ind = (modes[currentMode].speed - 1) * 16 /60;
         for (byte y = 0; y <= HEIGHT; y++) {
           if (ind <= y)
             drawPixelXY(0, 15 - y, CHSV(100, 255, 255));
@@ -121,6 +121,7 @@ void changePower() { // плавное включение/выключение
     FastLED.setBrightness(modes[currentMode].brightness);
     delay(2);
     FastLED.show();
+    digitalWrite(LED_BUILTIN, HIGH);
   } else {
     effectsTick();
     for (int i = modes[currentMode].brightness; i > 8; i -= 8) {
@@ -132,5 +133,6 @@ void changePower() { // плавное включение/выключение
     delay(2);
     FastLED.show();
     saveConfig();
+    digitalWrite(LED_BUILTIN, LOW);
   }
 }

@@ -62,7 +62,7 @@ boolean GButton::isRelease() {
 		return true;
 	} else return false;
 }
-boolean GButton::isClick() {	
+boolean GButton::isClick() {
 	if (flags.tickMode) GButton::tick();
 	if (flags.isOne_f) {
 		flags.isOne_f = false;
@@ -129,7 +129,7 @@ boolean GButton::hasClicks() {
 	} else return false;
 }
 uint8_t GButton::getClicks() {
-	return last_counter;	
+	return last_counter;
 }
 boolean GButton::isStep() {
 	if (flags.tickMode) GButton::tick();
@@ -145,41 +145,41 @@ void GButton::tick(boolean state) {
 	GButton::tick();
 	flags.mode = false;
 }
-void GButton::tick() {	
-  // ÷èòàåì ïèí
+void GButton::tick() {
+  // Ñ‡Ğ¸Ñ‚Ğ°ĞµĞ¼ Ğ¿Ğ¸Ğ½
   if (!flags.mode) flags.btn_state = !digitalRead(_PIN) ^ (flags.inv_state ^ flags.type);
-	
-  // íàæàòèå
+
+  // Ğ½Ğ°Ğ¶Ğ°Ñ‚Ğ¸Ğµ
   if (flags.btn_state && !flags.btn_flag) {
 	if (!flags.btn_deb) {
 		flags.btn_deb = true;
 		btn_timer = millis();
 	} else {
 		if (millis() - btn_timer >= _debounce) {
-			flags.btn_flag = true;			
+			flags.btn_flag = true;
 			flags.isPress_f = true;
 			flags.oneClick_f = true;
 		}
-	}    
+	}
   } else {
 	  flags.btn_deb = false;
   }
-  
-  // îòïóñêàíèå
+
+  // Ğ¾Ñ‚Ğ¿ÑƒÑĞºĞ°Ğ½Ğ¸Ğµ
   if (!flags.btn_state && flags.btn_flag) {
     flags.btn_flag = false;
 	if (!flags.hold_flag) btn_counter++;
     flags.hold_flag = false;
     flags.isRelease_f = true;
 	btn_timer = millis();
-	flags.step_flag = false;	
+	flags.step_flag = false;
 	if (flags.oneClick_f) {
 		flags.oneClick_f = false;
 		flags.isOne_f = true;
 	}
   }
-  
-  // êíîïêà óäåğæèâàåòñÿ
+
+  // ĞºĞ½Ğ¾Ğ¿ĞºĞ° ÑƒĞ´ĞµÑ€Ğ¶Ğ¸Ğ²Ğ°ĞµÑ‚ÑÑ
   if (flags.btn_flag && flags.btn_state && (millis() - btn_timer >= _timeout) && !flags.hold_flag) {
     flags.hold_flag = true;
 	flags.isHolded_f = btn_counter + 1;
@@ -189,9 +189,9 @@ void GButton::tick() {
 	flags.oneClick_f = false;
 	btn_timer = millis();
   }
-  
-  // îáğàáîòêà íàêëèêèâàíèÿ
-  if ((millis() - btn_timer >= _click_timeout) && (btn_counter != 0)) {    
+
+  // Ğ¾Ğ±Ñ€Ğ°Ğ±Ğ¾Ñ‚ĞºĞ° Ğ½Ğ°ĞºĞ»Ğ¸ĞºĞ¸Ğ²Ğ°Ğ½Ğ¸Ñ
+  if ((millis() - btn_timer >= _click_timeout) && (btn_counter != 0)) {
     last_counter = btn_counter;
     btn_counter = 0;
 	flags.counter_flag = true;
