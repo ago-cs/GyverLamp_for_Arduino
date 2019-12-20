@@ -127,7 +127,7 @@ void buttonTick() {
         //                  modes[currentMode].brightness = 1;
         //                }
         //modes[currentMode].brightness = constrain(modes[currentMode].brightness + (modes[currentMode].brightness / 25 + 1) * (brightDirection * 2 - 1), 1, 255);
-        modes[currentMode].brightness = constrain(modes[currentMode].brightness + 5 * (brightDirection * 2 - 1), 1, 255);
+        modes[currentMode].brightness = constrain(modes[currentMode].brightness + 2 * (brightDirection * 2 - 1), 1, 192);
         //        byte x = sqrt(modes[currentMode].brightness);
         //        for (byte y = 0; y < HEIGHT - 1; y++) {
         //          if (x < y) drawPixelXY(1, y, CHSV(10,200,200));
@@ -168,7 +168,7 @@ void buttonTick() {
         //                  modes[currentMode].scale = 1;
         //                }
         //modes[currentMode].scale = constrain(modes[currentMode].scale + (modes[currentMode].scale / 25 + 1) * (scaleDirection * 2 - 1), 1, 255);
-        modes[currentMode].scale = constrain(modes[currentMode].scale + 5 * (scaleDirection * 2 - 1), 1, 255);
+        modes[currentMode].scale = constrain(modes[currentMode].scale + 2 * (scaleDirection * 2 - 1), 1, 192);
         break;
       }
     }

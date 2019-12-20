@@ -74,20 +74,22 @@ void setup() {
   FastLED.clear();
   FastLED.show();
 
-  touch.setStepTimeout(100);
-  touch.setClickTimeout(500);
+  touch.setStepTimeout(50);
+  touch.setClickTimeout(600);
+  touch.setDebounce(20);
 
   Serial.begin(9600);
   Serial.println();
 
-  if (EEPROM.read(0) ==
-      102) { // если было сохранение настроек, то восстанавливаем их (с)НР
+  if (EEPROM.read(0) == 102) { // если было сохранение настроек, то восстанавливаем их (с)НР
     currentMode = EEPROM.read(1);
     for (byte x = 0; x < MODE_AMOUNT; x++) {
       modes[x].brightness = EEPROM.read(x * 3 + 11); // (2-10 байт - резерв)
       modes[x].speed = EEPROM.read(x * 3 + 12);
       modes[x].scale = EEPROM.read(x * 3 + 13);
     }
+  } else {
+    modes[17].brightness = 140;
   }
   pinMode(LED_BUILTIN, OUTPUT);
   digitalWrite(LED_BUILTIN, HIGH);

@@ -78,30 +78,39 @@ void effectsTick() {
       }
       switch (numHold) { // индикатор уровня яркости/скорости/масштаба
       case 1:
-        ind = (modes[currentMode].brightness + 1) / 16;
+        ind = (modes[currentMode].brightness + 1) / 12;
         for (byte y = 0; y < HEIGHT; y++) {
-          if (ind > y)
-            drawPixelXY(0, y, CHSV(10, 255, 255));
-          else
-            drawPixelXY(0, y, 0);
+          if (ind > y) {
+            drawPixelXY(7, y, CHSV(10, 255, 255));
+            drawPixelXY(8, y, CHSV(10, 255, 255));
+          } else {
+            drawPixelXY(7, y, 0);
+            drawPixelXY(8, y, 0);
+          }
         }
         break;
       case 2:
-        ind = (modes[currentMode].speed - 1) * 16 /60;
+        ind = (modes[currentMode].speed - 1) * 16 / 60;
         for (byte y = 0; y <= HEIGHT; y++) {
-          if (ind <= y)
-            drawPixelXY(0, 15 - y, CHSV(100, 255, 255));
-          else
-            drawPixelXY(0, 15 - y, 0);
+          if (ind <= y) {
+            drawPixelXY(7, 15 - y, CHSV(100, 255, 255));
+            drawPixelXY(8, 15 - y, CHSV(100, 255, 255));
+          } else {
+            drawPixelXY(7, 15 - y, 0);
+            drawPixelXY(8, 15 - y, 0);
+          }
         }
         break;
       case 3:
-        ind = (modes[currentMode].scale + 1) / 16;
+        ind = (modes[currentMode].scale + 1) / 12;
         for (byte y = 0; y < HEIGHT; y++) {
-          if (ind > y)
-            drawPixelXY(0, y, CHSV(150, 255, 255));
-          else
-            drawPixelXY(0, y, 0);
+          if (ind > y) {
+            drawPixelXY(7, y, CHSV(150, 255, 255));
+            drawPixelXY(7, y, CHSV(150, 255, 255));
+          } else {
+            drawPixelXY(7, y, 0);
+            drawPixelXY(8, y, 0);
+          }
         }
         break;
       }

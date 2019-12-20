@@ -2,7 +2,7 @@
 #include <Arduino.h>
 
 GButton::GButton(uint8_t BUTT) {
-  _BUTT = BUTT;  
+  _BUTT = BUTT;
   _debounce = 80;
   _timeout = 500;
   _incr_timeout = 800;
@@ -70,7 +70,7 @@ boolean GButton::hasClicks() {
 	} else return false;
 }
 uint8_t GButton::getClicks() {
-	return last_counter;	
+	return last_counter;
 }
 
 boolean GButton::isIncr() {
@@ -81,15 +81,15 @@ int16_t GButton::getIncr(int16_t incr_value) {
 	if (isHold_f && (millis() - incr_timer > _incr_timeout)) {
 		incr_timer = millis();
 		incr_flag = true;
-		return (incr_value + step);	
+		return (incr_value + step);
 	} else return incr_value;
 }
 
-void GButton::tick() {	
+void GButton::tick() {
 	btn_state = !digitalRead(_BUTT);
 	if (btn_state) isHold_f = true;
 	else isHold_f = false;
-	
+
   if (btn_state && !btn_flag && (millis() - btn_timer > _debounce)) {
     btn_flag = true;
     btn_counter++;
@@ -110,8 +110,8 @@ void GButton::tick() {
 	incr_flag = true;
 	incr_timer = millis();
   }
-  
-  if ((millis() - btn_timer > _timeout) && (btn_counter != 0)) {    
+
+  if ((millis() - btn_timer > _timeout) && (btn_counter != 0)) {
     last_counter = btn_counter;
     btn_counter = 0;
 	counter_flag = true;
