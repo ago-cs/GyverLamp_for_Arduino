@@ -174,7 +174,7 @@ byte hue;
 void rainbowVertical() {
   hue += 2;
   for (byte j = 0; j < HEIGHT; j++) {
-    CHSV thisColor = CHSV((byte)(hue + j * modes[2].scale), 255, 255);
+    CHSV thisColor = CHSV((byte)(hue + j * modes[2].scale/10), 255, 255);
     for (byte i = 0; i < WIDTH; i++)
       drawPixelXY(i, j, thisColor);
   }
@@ -182,7 +182,7 @@ void rainbowVertical() {
 void rainbowHorizontal() {
   hue += 2;
   for (byte i = 0; i < WIDTH; i++) {
-    CHSV thisColor = CHSV((byte)(hue + i * modes[3].scale), 255, 255);
+    CHSV thisColor = CHSV((byte)(hue + i * modes[3].scale/10), 255, 255);
     for (byte j = 0; j < HEIGHT; j++)
       drawPixelXY(i, j, thisColor); //leds[getPixelNumber(i, j)] = thisColor;
   }
@@ -190,7 +190,7 @@ void rainbowHorizontal() {
 
 // ---------------------------------------- ЦВЕТА ------------------------------------------
 void colorsRoutine() {
-  hue += modes[4].scale;
+  hue += modes[4].scale/10;
   for (int i = 0; i < NUM_LEDS; i++) {
     leds[i] = CHSV(hue, 255, 255);
   }
@@ -215,7 +215,7 @@ void snowRoutine() {
   for (byte x = 0; x < WIDTH; x++) {
     // заполняем случайно верхнюю строку
     // а также не даём двум блокам по вертикали вместе быть
-    if (getPixColorXY(x, HEIGHT - 2) == 0 && (random(0, modes[15].scale) == 0))
+    if (getPixColorXY(x, HEIGHT - 2) == 0 && (random(0, 4 + modes[15].scale/2) == 0))
       drawPixelXY(x, HEIGHT - 1, 0xE0FFFF - 0x101010 * random(0, 4));
     else
       drawPixelXY(x, HEIGHT - 1, 0x000000);
@@ -228,7 +228,7 @@ void matrixRoutine() {
     // заполняем случайно верхнюю строку
     uint32_t thisColor = getPixColorXY(x, HEIGHT - 1);
     if (thisColor == 0)
-      drawPixelXY(x, HEIGHT - 1, 0x00FF00 * (random(0, modes[16].scale) == 0));
+      drawPixelXY(x, HEIGHT - 1, 0x00FF00 * (random(0, 4+modes[16].scale/4) == 0));
     else if (thisColor < 0x002000)
       drawPixelXY(x, HEIGHT - 1, 0);
     else

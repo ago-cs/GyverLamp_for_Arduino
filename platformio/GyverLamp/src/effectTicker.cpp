@@ -106,7 +106,7 @@ void effectsTick() {
         for (byte y = 0; y < HEIGHT; y++) {
           if (ind > y) {
             drawPixelXY(7, y, CHSV(150, 255, 255));
-            drawPixelXY(7, y, CHSV(150, 255, 255));
+            drawPixelXY(8, y, CHSV(150, 255, 255));
           } else {
             drawPixelXY(7, y, 0);
             drawPixelXY(8, y, 0);

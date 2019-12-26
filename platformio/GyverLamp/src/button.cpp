@@ -128,6 +128,8 @@ void buttonTick() {
         //                }
         //modes[currentMode].brightness = constrain(modes[currentMode].brightness + (modes[currentMode].brightness / 25 + 1) * (brightDirection * 2 - 1), 1, 255);
         modes[currentMode].brightness = constrain(modes[currentMode].brightness + 2 * (brightDirection * 2 - 1), 1, 192);
+        //Serial.print("Brightnes ");
+        //Serial.println(modes[currentMode].brightness);
         //        byte x = sqrt(modes[currentMode].brightness);
         //        for (byte y = 0; y < HEIGHT - 1; y++) {
         //          if (x < y) drawPixelXY(1, y, CHSV(10,200,200));
@@ -151,6 +153,8 @@ void buttonTick() {
         //                }
         //modes[currentMode].speed = constrain(modes[currentMode].speed + (modes[currentMode].speed / 25 + 1) * (speedDirection * 2 - 1), 1, 255);
         modes[currentMode].speed = constrain(modes[currentMode].speed + 1 * (speedDirection * 2 - 1), 1, 60);
+        //Serial.print("Speed ");
+        //Serial.println(modes[currentMode].speed);
         break;
 
       case 3:
@@ -169,6 +173,8 @@ void buttonTick() {
         //                }
         //modes[currentMode].scale = constrain(modes[currentMode].scale + (modes[currentMode].scale / 25 + 1) * (scaleDirection * 2 - 1), 1, 255);
         modes[currentMode].scale = constrain(modes[currentMode].scale + 2 * (scaleDirection * 2 - 1), 1, 192);
+        //Serial.print("Scale ");
+        //Serial.println(modes[currentMode].scale);
         break;
       }
     }

@@ -4,5 +4,5 @@
 struct MODE_STR {
   byte brightness = 50;
   byte speed = 30;
-  byte scale = 10;
+  byte scale = 96;
 };

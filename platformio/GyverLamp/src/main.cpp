@@ -78,8 +78,8 @@ void setup() {
   touch.setClickTimeout(600);
   touch.setDebounce(20);
 
-  Serial.begin(9600);
-  Serial.println();
+  //Serial.begin(115200);
+  //Serial.println();
 
   if (EEPROM.read(0) == 102) { // если было сохранение настроек, то восстанавливаем их (с)НР
     currentMode = EEPROM.read(1);
@@ -90,6 +90,7 @@ void setup() {
     }
   } else {
     modes[17].brightness = 140;
+    modes[1].scale = 1;
   }
   pinMode(LED_BUILTIN, OUTPUT);
   digitalWrite(LED_BUILTIN, HIGH);
