@@ -16,7 +16,13 @@ extern MODE_STR modes[MODE_AMOUNT];
 extern byte numHold;
 extern unsigned long numHold_Timer;
 
-extern bool isSetupMode = false;
+// 0: regular mode (non-setup)
+// 1: brightness change mode
+// 2: effect change mode
+// 3: scale change mode
+// 4: freequency change mode
+extern int setupModeState = 0;
+extern unsigned long setupModeMillis;
 
 boolean brightDirection, speedDirection, scaleDirection;
 // byte numHold;
@@ -26,19 +32,25 @@ void encoderTick() {
   encoder.tick();
 
   if (touch.isSingle()) {
-    if (ONflag) {
-      ONflag = false;
-      changePower();
-    } else {
-      ONflag = true;
-      changePower();
-    }
+    ONflag = !ONflag;
+    changePower();
   }
 
   if (!ONflag)
     return;
 
-  if (encoder.isRight() || touch.isDouble()) {
+  if (encoder.isTurn()) {
+    if (setupModeState == 0)
+      setupModeState = 1;
+
+    if (setupModeState == 1) {
+      bool brightDirectionAgo = encoder.isRight();
+      modes[currentMode].brightness = constrain(modes[currentMode].brightness + 2 * (brightDirectionAgo * 2 - 1), 1, 192);
+      numHold = 1;
+    }
+  }
+
+  if (touch.isDouble()) {
     if (++currentMode >= MODE_AMOUNT)
       currentMode = 0;
     FastLED.setBrightness(modes[currentMode].brightness);
@@ -47,7 +59,7 @@ void encoderTick() {
     FastLED.clear();
     delay(1);
   }
-  if (encoder.isLeft() || touch.isTriple()) {
+  if (touch.isTriple()) {
     if (--currentMode < 0)
       currentMode = MODE_AMOUNT - 1;
     FastLED.setBrightness(modes[currentMode].brightness);
