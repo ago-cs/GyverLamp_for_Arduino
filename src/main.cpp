@@ -18,17 +18,21 @@
 #include <GyverEncoder.h>
 
 CRGB leds[NUM_LEDS];
-GButton touch(BTN_PIN, HIGH_PULL, NORM_OPEN);
+GButton button(ENCDR_SW, HIGH_PULL, NORM_OPEN);
 Encoder encoder(ENCDR_CLK, ENCDR_DT, -1, TYPE1);
 
 static const byte maxDim = max(WIDTH, HEIGHT);
 MODE_STR modes[MODE_AMOUNT];
 
-int8_t currentMode = 17;
+int8_t currentMode = 1;
 boolean loadingFlag = true;
 boolean ONflag = true;
-byte numHold;
-unsigned long numHold_Timer = 0;
+byte setupState = 0; // 0: regular mode (non-setup)
+                     // 1: brightness change mode
+                     // 2: effect change mode
+                     // 3: scale change mode
+                     // 4: speed change mode
+unsigned long setupState_OffTimer = 0;
 
 unsigned char matrixValue[8][16];
 
@@ -42,9 +46,9 @@ void setup() {
   FastLED.clear();
   FastLED.show();
 
-  touch.setStepTimeout(50);
-  touch.setClickTimeout(600);
-  touch.setDebounce(20);
+  button.setStepTimeout(50);
+  button.setClickTimeout(600);
+  button.setDebounce(20);
 
   //Serial.begin(115200);
   //Serial.println();
