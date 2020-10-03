@@ -15,4 +15,3 @@ void colorRoutine();
 void snowRoutine();
 void matrixRoutine();
 void whiteLamp();
-//void lightersRoutine();

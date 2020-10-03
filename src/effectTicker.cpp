@@ -72,8 +72,6 @@ void effectsTick() {
         break;
       case 17:
         whiteLamp();
-        //      case 17:
-        //        lightersRoutine();
         break;
       }
       switch (numHold) { // индикатор уровня яркости/скорости/масштаба
