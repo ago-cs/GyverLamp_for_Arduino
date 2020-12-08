@@ -10,15 +10,15 @@ extern MODE_STR modes[MODE_AMOUNT];
 
 // ******************* НАСТРОЙКИ *****************
 // "масштаб" эффектов. Чем меньше, тем крупнее!
-#define MADNESS_SCALE 100
-#define CLOUD_SCALE 30
-#define LAVA_SCALE 50
-#define PLASMA_SCALE 30
-#define RAINBOW_SCALE 30
-#define RAINBOW_S_SCALE 20
-#define ZEBRA_SCALE 30
-#define FOREST_SCALE 120
-#define OCEAN_SCALE 90
+// #define MADNESS_SCALE 100
+// #define CLOUD_SCALE 30
+// #define LAVA_SCALE 50
+// #define PLASMA_SCALE 30
+// #define RAINBOW_SCALE 30
+// #define RAINBOW_S_SCALE 20
+// #define ZEBRA_SCALE 30
+// #define FOREST_SCALE 120
+// #define OCEAN_SCALE 90
 
 // ***************** ДЛЯ РАЗРАБОТЧИКОВ ******************
 
@@ -27,7 +27,7 @@ static uint16_t x;
 static uint16_t y;
 static uint16_t z;
 
-uint16_t speed = 20/5; // speed is set dynamically once we've started up
+uint16_t speed = 20; // speed is set dynamically once we've started up
 uint16_t scale = 30; // scale is set dynamically once we've started up
 
 // This is the array that we keep our computed noise values in (это массив, в
@@ -46,7 +46,7 @@ uint8_t ihue = 0;
 void madnessNoise() {
   if (loadingFlag) {
     loadingFlag = false;
-    scale = modes[5].scale/4;
+    scale = modes[5].scale / 4;
     speed = modes[5].speed;
   }
   fillnoise8();
@@ -62,7 +62,7 @@ void rainbowNoise() {
   if (loadingFlag) {
     loadingFlag = false;
     currentPalette = RainbowColors_p;
-    scale = modes[9].scale/4;
+    scale = modes[9].scale / 4;
     speed = modes[9].speed;
     colorLoop = 1;
   }
@@ -72,8 +72,8 @@ void rainbowStripeNoise() {
   if (loadingFlag) {
     loadingFlag = false;
     currentPalette = RainbowStripeColors_p;
-    scale = modes[10].scale/8;
-    speed = modes[10].speed/3;
+    scale = modes[10].scale / 8;
+    speed = modes[10].speed / 3;
     colorLoop = 1;
   }
   fillNoiseLED();
@@ -88,14 +88,9 @@ void zebraNoise() {
     currentPalette[4] = CRGB::White;
     currentPalette[8] = CRGB::White;
     currentPalette[12] = CRGB::White;
-    scale = modes[11].scale/8;
+    scale = modes[11].scale / 8;
     speed = modes[11].speed;
     colorLoop = 1;
-
-    //    Serial.print(" speed:");
-    //    Serial.print(modes[currentMode].speed);
-    //    Serial.print(" scale:");
-    //    Serial.println(modes[currentMode].scale);
   }
   fillNoiseLED();
 }
@@ -103,7 +98,7 @@ void forestNoise() {
   if (loadingFlag) {
     loadingFlag = false;
     currentPalette = ForestColors_p;
-    scale = modes[12].scale/8;
+    scale = modes[12].scale / 8;
     speed = modes[12].speed;
     colorLoop = 0;
   }
@@ -113,7 +108,7 @@ void oceanNoise() {
   if (loadingFlag) {
     loadingFlag = false;
     currentPalette = OceanColors_p;
-    scale = modes[13].scale/8;
+    scale = modes[13].scale / 8;
     speed = modes[13].speed;
     colorLoop = 0;
   }
@@ -124,7 +119,7 @@ void plasmaNoise() {
   if (loadingFlag) {
     loadingFlag = false;
     currentPalette = PartyColors_p;
-    scale = modes[8].scale/4;
+    scale = modes[8].scale / 4;
     speed = modes[8].speed;
     colorLoop = 1;
   }
@@ -134,7 +129,7 @@ void cloudNoise() {
   if (loadingFlag) {
     loadingFlag = false;
     currentPalette = CloudColors_p;
-    scale = modes[6].scale/2;
+    scale = modes[6].scale / 2;
     speed = modes[6].speed;
     colorLoop = 0;
   }
@@ -144,7 +139,7 @@ void lavaNoise() {
   if (loadingFlag) {
     loadingFlag = false;
     currentPalette = LavaColors_p;
-    scale = modes[7].scale/2;
+    scale = modes[7].scale / 2;
     speed = modes[7].speed;
     colorLoop = 0;
   }

@@ -1,3 +1,4 @@
+#include "brightness.h"
 #include "config.h"
 #include "effects.h"
 #include "main.h"
@@ -6,15 +7,18 @@
 #include <Arduino.h>
 
 uint32_t effTimer;
-byte ind;
+byte index;
+byte index2;
 
 extern boolean ONflag;
 extern int8_t currentMode;
 extern byte setupState;
 extern MODE_STR modes[MODE_AMOUNT];
+extern BrightnessManager brightnessManager;
 
 void effectsTick() {
-  if (ONflag && millis() - effTimer >= ((currentMode < 5 || currentMode > 13) ? modes[currentMode].speed : 50)) {
+  //if (ONflag && millis() - effTimer >= ((currentMode < 5 || currentMode > 13) ? modes[currentMode].speed : 50)) {
+  if (ONflag && millis() - effTimer >= modes[currentMode].speed) {
     effTimer = millis();
     switch (currentMode) {
     case 0:
@@ -72,11 +76,11 @@ void effectsTick() {
       whiteLamp();
       break;
     }
-    switch (setupState) { // индикатор уровня яркости/скорости/масштаба
-    case 1:
-      ind = (modes[currentMode].brightness + 1) / 12;
+    switch (setupState) {
+    case 1: // индикатор уровня яркости
+      index = brightnessManager.getCurrentLevelIndex(modes[currentMode].brightness);
       for (byte y = 0; y < HEIGHT; y++) {
-        if (ind > y) {
+        if (index >= y) {
           drawPixelXY(7, y, CHSV(10, 255, 255));
           drawPixelXY(8, y, CHSV(10, 255, 255));
         } else {
@@ -85,34 +89,33 @@ void effectsTick() {
         }
       }
       break;
-    case 2:
+    case 2: // индикатор переключения режима
       for (byte x = 0; x < WIDTH; x++) {
         drawPixelXY(x, 0, CHSV(255, 255, 255));
         drawPixelXY(x, 1, 0);
       }
       break;
-    case 3:
-      ind = (modes[currentMode].scale + 1) / 12;
-      for (byte y = 0; y < HEIGHT; y++) {
-        if (ind > y) {
-          drawPixelXY(7, y, CHSV(150, 255, 255));
-          drawPixelXY(8, y, CHSV(150, 255, 255));
-        } else {
-          drawPixelXY(7, y, 0);
-          drawPixelXY(8, y, 0);
-        }
+    case 3:                                   // индикатор регулировки "масштаба"
+      index = modes[currentMode].scale / 16;  // шкала шестнадцаток
+      index2 = modes[currentMode].scale % 16; // шкала единц
+
+      drawPixelXY(7, 0, CHSV(170, 255, 255)); // первая линия исключается,
+      drawPixelXY(8, 0, CHSV(170, 255, 0));   // так как для отображения 255 значений
+      drawPixelXY(9, 0, CHSV(170, 255, 255)); // нужно всего два ряда по 15
+
+      for (byte y = 1; y <= HEIGHT + 1; y++) {
+        drawPixelXY(7, HEIGHT - y, index <= y ? CHSV(170, 255, 255) : CHSV(0, 0, 0));
+        drawPixelXY(8, HEIGHT - y, CHSV(0, 0, 0));
+        drawPixelXY(9, HEIGHT - y, index2 <= y ? CHSV(170, 255, 255) : CHSV(0, 0, 0));
       }
+
       break;
-    case 4:
-      ind = (modes[currentMode].speed - 1) * 16 / 60;
+    case 4: // индикатор уровня скорости (зелёный)
+      index = modes[currentMode].speed / 12 - 1;
       for (byte y = 0; y <= HEIGHT; y++) {
-        if (ind <= y) {
-          drawPixelXY(7, 15 - y, CHSV(100, 255, 255));
-          drawPixelXY(8, 15 - y, CHSV(100, 255, 255));
-        } else {
-          drawPixelXY(7, 15 - y, 0);
-          drawPixelXY(8, 15 - y, 0);
-        }
+        drawPixelXY(7, 15 - y, index <= y ? CHSV(80, 255, 255) : CHSV(0, 0, 0));
+        drawPixelXY(8, 15 - y, index <= y ? CHSV(80, 255, 255) : CHSV(0, 0, 0));
+        drawPixelXY(9, 15 - y, index <= y ? CHSV(80, 255, 255) : CHSV(0, 0, 0));
       }
       break;
     }

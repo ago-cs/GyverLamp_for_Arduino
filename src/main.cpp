@@ -1,7 +1,3 @@
-#include "main.h"
-#include "effectTicker.h"
-#include "encoder.h"
-#include <Arduino.h>
 /*
   Скетч к проекту "Многофункциональный RGB светильник"
   Страница проекта (схемы, описания): https://alexgyver.ru/GyverLamp/
@@ -11,15 +7,22 @@
   https://AlexGyver.ru/
 */
 
+#include "main.h"
+#include "brightness.h"
 #include "config.h"
+#include "effectTicker.h"
+#include "encoder.h"
+#include <Arduino.h>
 #include <EEPROM.h>
 #include <FastLED.h>
 #include <GyverButton.h>
 #include <GyverEncoder.h>
 
 CRGB leds[NUM_LEDS];
+
 GButton button(ENCDR_SW, HIGH_PULL, NORM_OPEN);
-Encoder encoder(ENCDR_CLK, ENCDR_DT, -1, TYPE1);
+Encoder encoder(ENCDR_CLK, ENCDR_DT, ENC_NO_BUTTON, TYPE2);
+BrightnessManager brightnessManager;
 
 static const byte maxDim = max(WIDTH, HEIGHT);
 MODE_STR modes[MODE_AMOUNT];
@@ -37,6 +40,9 @@ unsigned long setupState_OffTimer = 0;
 unsigned char matrixValue[8][16];
 
 void setup() {
+  attachInterrupt(0, interruptEncoderCallback, CHANGE);
+  attachInterrupt(1, interruptEncoderCallback, CHANGE);
+
   FastLED.addLeds<WS2812B, LED_PIN, COLOR_ORDER>(leds, NUM_LEDS);
   FastLED.setBrightness(BRIGHTNESS);
   if (CURRENT_LIMIT > 0) {
@@ -51,7 +57,6 @@ void setup() {
   button.setDebounce(20);
 
   //Serial.begin(115200);
-  //Serial.println();
 
   if (EEPROM.read(0) == 102) { // если было сохранение настроек, то восстанавливаем их
     currentMode = EEPROM.read(1);

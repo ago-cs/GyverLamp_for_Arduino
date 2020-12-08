@@ -11,19 +11,18 @@
 #define COLOR_ORDER GRB // порядок цветов на ленте. Если цвет отображается некорректно - меняйте. Начать можно с RGB
 
 #define MATRIX_TYPE 0      // тип матрицы: 0 - зигзаг, 1 - параллельная
-#define CONNECTION_ANGLE 3 // угол подключения: 0 - левый нижний, 1 - левый верхний, 2 - правый верхний, 3 - правый нижний
-#define STRIP_DIRECTION 1  // направление ленты из угла: 0 - вправо, 1 - вверх, 2 - влево, 3 - вниз
+#define CONNECTION_ANGLE 0 // угол подключения: 0 - левый нижний, 1 - левый верхний, 2 - правый верхний, 3 - правый нижний
+#define STRIP_DIRECTION 0  // направление ленты из угла: 0 - вправо, 1 - вверх, 2 - влево, 3 - вниз
 // при неправильной настройке матрицы вы получите предупреждение "Wrong matrix parameters! Set to default"
 // шпаргалка по настройке матрицы здесь! https://alexgyver.ru/matrix_guide/
 
 #define SETUP_STATE_TIMEOUT 5000 // время отображения индикатора уровня яркости/скорости/масштаба в мс
 
 // ============= ДЛЯ РАЗРАБОТЧИКОВ =============
-#define LED_PIN 4         // пин ленты
-#define ENCDR_SW 7        // кнопка энкодера
-#define ENCDR_CLK 6       // пины
-#define ENCDR_DT 5        // энкодера
-#define PRECISE_ALGORITHM // ставим высокоточный алгоритм обработки сигналов энкодера
+#define LED_PIN 5   // пин ленты
+#define ENCDR_SW 4  // SW кнопка энкодера
+#define ENCDR_CLK 3 // CLK пин энкодера (пин с прерыванием!)
+#define ENCDR_DT 2  // DT пин энкодера (пин с прерыванием!)
 
 #define MODE_AMOUNT 18
 #define NUM_LEDS WIDTH *HEIGHT

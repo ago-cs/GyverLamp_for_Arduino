@@ -1,3 +1,5 @@
+#include "encoder.h"
+#include "brightness.h"
 #include "config.h"
 #include "effectTicker.h"
 #include "main.h"
@@ -15,6 +17,11 @@ extern int8_t currentMode;
 extern MODE_STR modes[MODE_AMOUNT];
 extern byte setupState;
 extern unsigned long setupState_OffTimer;
+extern BrightnessManager brightnessManager;
+
+void interruptEncoderCallback() {
+  encoderTick();
+}
 
 void encoderTick() {
   button.tick();
@@ -38,7 +45,11 @@ void encoderTick() {
 
     //  яркость
     if (setupState == 1) {
-      modes[currentMode].brightness = constrain(modes[currentMode].brightness + 2 * (rightDirection * 2 - 1), 1, 192);
+      if (rightDirection) {
+        modes[currentMode].brightness = brightnessManager.getNextBrightnessValue(modes[currentMode].brightness);
+      } else {
+        modes[currentMode].brightness = brightnessManager.getPreviousBrightnessValue(modes[currentMode].brightness);
+      }
     }
 
     // эффект
@@ -61,12 +72,15 @@ void encoderTick() {
 
     // масштаб
     if (setupState == 3) {
-      modes[currentMode].scale = constrain(modes[currentMode].scale + 2 * (rightDirection * 2 - 1), 1, 192);
+      modes[currentMode].scale = constrain(modes[currentMode].scale + 1 * (rightDirection * 2 - 1), 1, 255);
+      loadingFlag = true;
+      FastLED.clear();
+      delay(1);
     }
 
     // скорость
     if (setupState == 4) {
-      modes[currentMode].speed = constrain(modes[currentMode].speed + 1 * (rightDirection * 2 - 1), 1, 60);
+      modes[currentMode].speed = constrain(modes[currentMode].speed + 12 * (!rightDirection * 2 - 1), 12, 192);
     }
 
     if (setupState != 0) {
@@ -88,8 +102,8 @@ void encoderTick() {
     case 4:
       setupState = 4;
       break;
-    case 5:
-      // если было пятикратное нажатие на кнопку, то производим сброс параметров
+    case 8:
+      // если было восьмикратное нажатие на кнопку, то производим сброс параметров
       // индикация сброса
       ONflag = false;
       changePower();
